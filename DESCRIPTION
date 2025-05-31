@@ -1,0 +1,15 @@
+Package: copernicusR
+Type: Package
+Title: Interfaz R para Descarga de Datos de Copernicus Marine con Python
+Version: 0.1.0
+Authors@R: 
+    person("TuNombre", "TuApellido", email = "tu@email.com", role = c("aut", "cre"))
+Description: Permite configurar, explorar y descargar datos del servicio Copernicus Marine directamente desde R, utilizando la API oficial de Python y reticulate. Pensado para integración multiplataforma, portabilidad y facilidad de uso.
+Depends: R (>= 3.5.0)
+Imports: 
+    reticulate
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
