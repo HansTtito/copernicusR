@@ -10,6 +10,13 @@ Paquete para descargar datos marinos de Copernicus Marine directamente desde R u
 # Desde tu repositorio local o GitHub:
 # remotes::install_github("tuusuario/copernicusR")
 
+
+# 1. Configurar entorno Python y módulo
+
+setup_copernicus() # Correrlo una sola vez
+
+# 2. Descarga de datos de copernicusmarine
+
 archivo <- copernicus_download(
   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
   variables = "zos",
