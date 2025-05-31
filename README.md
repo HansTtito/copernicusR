@@ -1,7 +1,5 @@
 # copernicusR
 
-[![R build status](https://github.com/HansTtito/copernicusR/workflows/R-CMD-check/badge.svg)](https://github.com/HansTtito/copernicusR)
-
 Paquete para descargar datos marinos de Copernicus Marine directamente desde R usando Python y la librería oficial `copernicusmarine`.
 
 ## Instalación
