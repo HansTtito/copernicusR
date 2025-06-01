@@ -1,6 +1,6 @@
 # copernicusR
 
-Paquete para descargar datos marinos de Copernicus Marine directamente desde R usando Python y la librería oficial [`copernicusmarine`](https://github.com/CopernicusMarine/copernicus-marine-client).
+Paquete para descargar datos marinos de Copernicus Marine directamente desde R usando Python y la librería oficial [`copernicusmarine`](https://pypi.org/project/copernicusmarine/).
 
 ---
 
