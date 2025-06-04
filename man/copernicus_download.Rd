@@ -7,7 +7,8 @@
 copernicus_download(
   dataset_id,
   variables,
-  fecha,
+  fecha_inicio,
+  fecha_fin,
   bbox = c(-180, 179.92, -80, 90),
   profundidad = c(0.494, 0.494),
   dataset_version = "202406",
@@ -23,7 +24,9 @@ copernicus_download(
 
 \item{variables}{Vector o lista de variables a descargar.}
 
-\item{fecha}{Fecha de descarga (YYYY-MM-DD).}
+\item{fecha_inicio}{Fecha de inicio de descarga (YYYY-MM-DD).}
+
+\item{fecha_fin}{Fecha de fin de descarga (YYYY-MM-DD).}
 
 \item{bbox}{Vector de 4 valores (xmin, xmax, ymin, ymax) para la región.}
 
@@ -31,7 +34,7 @@ copernicus_download(
 
 \item{dataset_version}{Versión del dataset.}
 
-\item{output_file}{Archivo de salida. Por defecto genera uno basado en fecha.}
+\item{output_file}{Archivo de salida. Por defecto genera uno basado en fechas.}
 
 \item{username}{Usuario Copernicus Marine (opcional, si no se usa archivo config).}
 
@@ -52,7 +55,8 @@ Descarga archivos .nc desde el catálogo de Copernicus Marine. Permite especific
 copernicus_download(
   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
   variables = "zos",
-  fecha = "2025-06-09",
+  fecha_inicio = "2025-06-01",
+  fecha_fin = "2025-06-09",
   username = "mi_usuario", password = "mi_contrasena"
 )
 }

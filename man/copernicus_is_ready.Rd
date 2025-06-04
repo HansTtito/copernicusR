@@ -4,11 +4,15 @@
 \alias{copernicus_is_ready}
 \title{Verificar si Copernicus Marine está listo}
 \usage{
-copernicus_is_ready()
+copernicus_is_ready(verbose = TRUE)
+}
+\arguments{
+\item{verbose}{Mostrar información detallada del estado.}
 }
 \value{
 TRUE si el entorno está listo para descargar.
 }
 \description{
+Verifica si el entorno está correctamente configurado para usar Copernicus Marine.
 Retorna TRUE si el módulo Python y archivo de configuración existen.
 }

@@ -2,6 +2,11 @@
 
 export(copernicus_download)
 export(copernicus_is_ready)
+export(copernicus_open_dataset)
+export(copernicus_read_dataframe)
 export(copernicus_reinstall_package)
+export(copernicus_sample_data)
 export(copernicus_test)
+export(copernicus_test_open)
+export(copernicus_test_read_dataframe)
 export(setup_copernicus)
