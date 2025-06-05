@@ -2,18 +2,18 @@
 % Please edit documentation in R/copernicus_download.R
 \name{copernicus_test}
 \alias{copernicus_test}
-\title{Probar integración Copernicus}
+\title{Test Copernicus integration}
 \usage{
 copernicus_test(username = NULL, password = NULL)
 }
 \arguments{
-\item{username}{Usuario Copernicus Marine (opcional).}
+\item{username}{Copernicus Marine username (optional).}
 
-\item{password}{Contraseña Copernicus Marine (opcional).}
+\item{password}{Copernicus Marine password (optional).}
 }
 \value{
-TRUE si la prueba fue exitosa.
+TRUE if the test was successful.
 }
 \description{
-Realiza una descarga de prueba pequeña para validar que todo el sistema funcione.
+Performs a small test download to validate that the whole system works.
 }

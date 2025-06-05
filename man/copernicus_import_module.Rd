@@ -2,17 +2,17 @@
 % Please edit documentation in R/copernicus_python.R
 \name{copernicus_import_module}
 \alias{copernicus_import_module}
-\title{Importar el módulo copernicusmarine de Python (uso interno)}
+\title{Import the copernicusmarine Python module (internal use)}
 \usage{
 copernicus_import_module(py)
 }
 \arguments{
-\item{py}{Objeto de configuración Python.}
+\item{py}{Python configuration object.}
 }
 \value{
-Módulo copernicusmarine importado.
+Imported copernicusmarine module.
 }
 \description{
-Importar el módulo copernicusmarine de Python (uso interno)
+Import the copernicusmarine Python module (internal use)
 }
 \keyword{internal}

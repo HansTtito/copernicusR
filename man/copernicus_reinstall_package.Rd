@@ -2,13 +2,13 @@
 % Please edit documentation in R/setup_copernicus.R
 \name{copernicus_reinstall_package}
 \alias{copernicus_reinstall_package}
-\title{Reinstalar el paquete Python copernicusmarine}
+\title{Reinstall the Python package copernicusmarine}
 \usage{
 copernicus_reinstall_package()
 }
 \value{
-Invisible TRUE si se instala correctamente.
+Invisible TRUE if successfully installed.
 }
 \description{
-Reinstala el módulo copernicusmarine en el entorno Python detectado.
+Reinstalls the copernicusmarine module in the detected Python environment.
 }

@@ -2,15 +2,15 @@
 % Please edit documentation in R/copernicus_download.R
 \name{copernicus_download}
 \alias{copernicus_download}
-\title{Descargar datos desde Copernicus Marine}
+\title{Download data from Copernicus Marine}
 \usage{
 copernicus_download(
   dataset_id,
   variables,
-  fecha_inicio,
-  fecha_fin,
+  start_date,
+  end_date,
   bbox = c(-180, 179.92, -80, 90),
-  profundidad = c(0.494, 0.494),
+  depth = c(0.494, 0.494),
   dataset_version = "202406",
   output_file = NULL,
   username = NULL,
@@ -20,44 +20,44 @@ copernicus_download(
 )
 }
 \arguments{
-\item{dataset_id}{ID del dataset (exacto).}
+\item{dataset_id}{ID of the dataset (exact).}
 
-\item{variables}{Vector o lista de variables a descargar.}
+\item{variables}{Vector or list of variables to download.}
 
-\item{fecha_inicio}{Fecha de inicio de descarga (YYYY-MM-DD).}
+\item{start_date}{Download start date (YYYY-MM-DD).}
 
-\item{fecha_fin}{Fecha de fin de descarga (YYYY-MM-DD).}
+\item{end_date}{Download end date (YYYY-MM-DD).}
 
-\item{bbox}{Vector de 4 valores (xmin, xmax, ymin, ymax) para la región.}
+\item{bbox}{Vector of 4 values (xmin, xmax, ymin, ymax) for the region.}
 
-\item{profundidad}{Vector de 2 valores: profundidad mínima y máxima.}
+\item{depth}{Vector of 2 values: minimum and maximum depth.}
 
-\item{dataset_version}{Versión del dataset.}
+\item{dataset_version}{Dataset version.}
 
-\item{output_file}{Archivo de salida. Por defecto genera uno basado en fechas.}
+\item{output_file}{Output file. By default, generates one based on dates.}
 
-\item{username}{Usuario Copernicus Marine (opcional, si no se usa archivo config).}
+\item{username}{Copernicus Marine username (optional, if no config file is used).}
 
-\item{password}{Contraseña Copernicus Marine (opcional).}
+\item{password}{Copernicus Marine password (optional).}
 
-\item{verbose_download}{Mostrar mensajes detallados.}
+\item{verbose_download}{Show detailed messages.}
 
-\item{...}{Otros argumentos extra pasados a la función Python.}
+\item{...}{Other extra arguments passed to the Python function.}
 }
 \value{
-Ruta absoluta del archivo descargado, o NULL si falla.
+Absolute path to the downloaded file, or NULL if it fails.
 }
 \description{
-Descarga archivos .nc desde el catálogo de Copernicus Marine. Permite especificar todas las opciones de la función Python.
+Downloads .nc files from the Copernicus Marine catalog. Allows specifying all options of the Python function.
 }
 \examples{
 \dontrun{
 copernicus_download(
   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
   variables = "zos",
-  fecha_inicio = "2025-06-01",
-  fecha_fin = "2025-06-09",
-  username = "mi_usuario", password = "mi_contrasena"
+  start_date = "2025-06-01",
+  end_date = "2025-06-09",
+  username = "my_username", password = "my_password"
 )
 }
 }

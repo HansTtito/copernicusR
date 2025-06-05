@@ -2,18 +2,18 @@
 % Please edit documentation in R/copernicus_opendataset.R
 \name{copernicus_test_open}
 \alias{copernicus_test_open}
-\title{Probar apertura de dataset Copernicus}
+\title{Test opening of Copernicus dataset}
 \usage{
 copernicus_test_open(username = NULL, password = NULL)
 }
 \arguments{
-\item{username}{Usuario Copernicus Marine (opcional).}
+\item{username}{Copernicus Marine username (optional).}
 
-\item{password}{Contraseña Copernicus Marine (opcional).}
+\item{password}{Copernicus Marine password (optional).}
 }
 \value{
-TRUE si la prueba fue exitosa.
+TRUE if the test was successful.
 }
 \description{
-Realiza una prueba de apertura de dataset para validar que la función open_dataset funcione.
+Performs a test dataset opening to validate that the open_dataset function works.
 }

@@ -2,19 +2,19 @@
 % Please edit documentation in R/setup_copernicus.R
 \name{setup_copernicus}
 \alias{setup_copernicus}
-\title{Configura la integración con Copernicus Marine (Python)}
+\title{Set up Copernicus Marine integration (Python)}
 \usage{
 setup_copernicus(install_copernicus = TRUE)
 }
 \arguments{
-\item{install_copernicus}{Lógico. ¿Instalar el paquete copernicusmarine en Python si no está disponible? Default: TRUE.}
+\item{install_copernicus}{Logical. Should the copernicusmarine package be installed in Python if not available? Default: TRUE.}
 }
 \value{
-Invisible TRUE si la configuración fue exitosa.
+Invisible TRUE if the configuration was successful.
 }
 \description{
-Configura el entorno Python y carga el módulo copernicusmarine para su uso en R.
-Se recomienda ejecutar una sola vez por sesión antes de llamar a otras funciones del paquete.
+Sets up the Python environment and loads the copernicusmarine module for use in R.
+It is recommended to run this once per session before calling other functions in the package.
 }
 \examples{
 setup_copernicus()

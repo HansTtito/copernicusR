@@ -2,15 +2,15 @@
 % Please edit documentation in R/copernicus_opendataset.R
 \name{copernicus_open_dataset}
 \alias{copernicus_open_dataset}
-\title{Abrir dataset desde Copernicus Marine sin descarga}
+\title{Open dataset from Copernicus Marine without download}
 \usage{
 copernicus_open_dataset(
   dataset_id,
   variables = NULL,
-  fecha_inicio = NULL,
-  fecha_fin = NULL,
+  start_date = NULL,
+  end_date = NULL,
   bbox = NULL,
-  profundidad = NULL,
+  depth = NULL,
   dataset_version = NULL,
   username = NULL,
   password = NULL,
@@ -19,53 +19,53 @@ copernicus_open_dataset(
 )
 }
 \arguments{
-\item{dataset_id}{ID del dataset (exacto).}
+\item{dataset_id}{ID of the dataset (exact).}
 
-\item{variables}{Vector o lista de variables a abrir. Si es NULL, abre todas.}
+\item{variables}{Vector or list of variables to open. If NULL, opens all.}
 
-\item{fecha_inicio}{Fecha de inicio (YYYY-MM-DD). Opcional.}
+\item{start_date}{Start date (YYYY-MM-DD). Optional.}
 
-\item{fecha_fin}{Fecha de fin (YYYY-MM-DD). Opcional.}
+\item{end_date}{End date (YYYY-MM-DD). Optional.}
 
-\item{bbox}{Vector de 4 valores (xmin, xmax, ymin, ymax) para la región. Opcional.}
+\item{bbox}{Vector of 4 values (xmin, xmax, ymin, ymax) for the region. Optional.}
 
-\item{profundidad}{Vector de 2 valores: profundidad mínima y máxima. Opcional.}
+\item{depth}{Vector of 2 values: minimum and maximum depth. Optional.}
 
-\item{dataset_version}{Versión del dataset. Opcional.}
+\item{dataset_version}{Dataset version. Optional.}
 
-\item{username}{Usuario Copernicus Marine (opcional, si no se usa archivo config).}
+\item{username}{Copernicus Marine username (optional, if no config file is used).}
 
-\item{password}{Contraseña Copernicus Marine (opcional).}
+\item{password}{Copernicus Marine password (optional).}
 
-\item{verbose_open}{Mostrar mensajes detallados.}
+\item{verbose_open}{Show detailed messages.}
 
-\item{...}{Otros argumentos extra pasados a la función Python.}
+\item{...}{Other extra arguments passed to the Python function.}
 }
 \value{
-Objeto xarray.Dataset de Python, o NULL si falla.
+Python xarray.Dataset object, or NULL if it fails.
 }
 \description{
-Abre un dataset directamente desde Copernicus Marine usando open_dataset.
-Retorna un objeto xarray.Dataset que puede ser procesado en R.
-Útil para explorar datos sin descargar archivos completos.
+Opens a dataset directly from Copernicus Marine using open_dataset.
+Returns a Python xarray.Dataset object that can be processed in R.
+Useful for exploring data without downloading full files.
 }
 \examples{
 \dontrun{
-# Abrir dataset completo
+# Open full dataset
 ds <- copernicus_open_dataset(
   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
   variables = c("zos", "uo", "vo")
 )
 
-# Abrir con filtros temporales y espaciales
+# Open with temporal and spatial filters
 ds <- copernicus_open_dataset(
   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
   variables = "zos",
-  fecha_inicio = "2025-06-01",
-  fecha_fin = "2025-06-10",
+  start_date = "2025-06-01",
+  end_date = "2025-06-10",
   bbox = c(-10, 5, 35, 50),
-  username = "mi_usuario",
-  password = "mi_contrasena"
+  username = "my_username",
+  password = "my_password"
 )
 }
 }

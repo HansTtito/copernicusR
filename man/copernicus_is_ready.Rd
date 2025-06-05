@@ -2,17 +2,17 @@
 % Please edit documentation in R/copernicus_download.R
 \name{copernicus_is_ready}
 \alias{copernicus_is_ready}
-\title{Verificar si Copernicus Marine está listo}
+\title{Check if Copernicus Marine Python module is ready}
 \usage{
 copernicus_is_ready(verbose = TRUE)
 }
 \arguments{
-\item{verbose}{Mostrar información detallada del estado.}
+\item{verbose}{Show detailed status information.}
 }
 \value{
-TRUE si el entorno está listo para descargar.
+TRUE if the Python module is loaded and ready.
 }
 \description{
-Verifica si el entorno está correctamente configurado para usar Copernicus Marine.
-Retorna TRUE si el módulo Python y archivo de configuración existen.
+Checks if the Python module is properly loaded to use Copernicus Marine.
+Returns TRUE if the module exists.
 }

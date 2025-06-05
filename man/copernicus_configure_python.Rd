@@ -2,15 +2,15 @@
 % Please edit documentation in R/copernicus_python.R
 \name{copernicus_configure_python}
 \alias{copernicus_configure_python}
-\title{Buscar e inicializar Python en cualquier sistema operativo (uso interno)}
+\title{Search and initialize Python on any operating system (internal use)}
 \usage{
 copernicus_configure_python()
 }
 \value{
-La configuración de Python detectada (objeto py_config).
+The detected Python configuration (py_config object).
 }
 \description{
-Busca el ejecutable de Python en rutas comunes y en el PATH del sistema.
-Si lo encuentra, lo inicializa mediante reticulate.
+Searches for the Python executable in common paths and the system PATH.
+If found, it initializes it via reticulate.
 }
 \keyword{internal}

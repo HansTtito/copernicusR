@@ -2,17 +2,17 @@
 % Please edit documentation in R/zzz.R
 \name{.copernicus_env}
 \alias{.copernicus_env}
-\title{Ambiente privado de Copernicus (uso interno)}
+\title{Copernicus private environment (internal use)}
 \usage{
 .copernicus_env()
 }
 \value{
-Un environment privado en el espacio global de R.
+A private environment in the global R space.
 }
 \description{
-Esta función crea (si no existe) y retorna el ambiente interno donde el paquete
-guarda objetos persistentes (por ejemplo, el módulo Python, configuraciones, etc.).
-Se utiliza para evitar contaminación en el espacio global del usuario y mantener
-las referencias entre funciones internas del paquete.
+This function creates (if it doesn’t already exist) and returns the internal environment
+where the package stores persistent objects (e.g., the Python module, configurations, etc.).
+It is used to avoid polluting the user's global environment and to maintain
+references between the package's internal functions.
 }
 \keyword{internal}

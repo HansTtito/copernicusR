@@ -2,17 +2,17 @@
 % Please edit documentation in R/copernicus_python.R
 \name{copernicus_install_package}
 \alias{copernicus_install_package}
-\title{Instalar el paquete Python copernicusmarine (uso interno)}
+\title{Install the Python package copernicusmarine (internal use)}
 \usage{
 copernicus_install_package(py)
 }
 \arguments{
-\item{py}{Objeto de configuración Python.}
+\item{py}{Python configuration object.}
 }
 \value{
-Invisible TRUE si la instalación es exitosa.
+Invisible TRUE if the installation is successful.
 }
 \description{
-Instalar el paquete Python copernicusmarine (uso interno)
+Install the Python package copernicusmarine (internal use)
 }
 \keyword{internal}
