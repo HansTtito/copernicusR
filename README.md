@@ -1,62 +1,57 @@
 # copernicusR
 
-Paquete para descargar datos marinos de Copernicus Marine directamente desde R usando Python y la librería oficial [`copernicusmarine`](https://pypi.org/project/copernicusmarine/).
+Package to download marine data from Copernicus Marine directly in R using Python and the official [`copernicusmarine`](https://pypi.org/project/copernicusmarine/) library.
 
 ---
 
-## 🚀 Descripción
+## 🚀 Description
 
-`copernicusR` permite configurar el entorno Python, explorar el catálogo de datasets y descargar archivos NetCDF (.nc) de Copernicus Marine directamente desde R, integrando la API oficial de Python con el ecosistema R a través de `reticulate`.
+`copernicusR` allows you to set up the Python environment, explore the dataset catalog, and download NetCDF (.nc) files from Copernicus Marine directly from R, integrating the official Python API with the R ecosystem through `reticulate`.
 
 ---
 
-## 📦 Instalación
+## 📦 Installation
 
-**Requisitos previos:**  
-- Tener instalado **Python 3** (idealmente desde [python.org](https://www.python.org/downloads/)).
-- Tener acceso a internet.
-- Disponer de una cuenta Copernicus Marine (gratuita, [regístrate aquí](https://data.marine.copernicus.eu/register)).
+**Prerequisites:**
 
-### 1. Instala el paquete desde GitHub
+* Have **Python 3** installed (ideally from [python.org](https://www.python.org/downloads/)).
+* Have internet access.
+* Have a Copernicus Marine account (free, [register here](https://data.marine.copernicus.eu/register)).
+
+### 1. Install the package from GitHub
 
 ```r
-# Instala remotes si no lo tienes
+# Install remotes if you don't have it
 install.packages("remotes")
 
-# Instala copernicusR desde GitHub
+# Install copernicusR from GitHub
 remotes::install_github("HansTtito/copernicusR")
 ```
 
-## ⚙️ Uso básico
+## ⚙️ Basic usage
 
 ```r
-
 library(copernicusR)
 
-# 1. Configurar entorno Python y módulo (correr una sola vez por sesión)
+# 1. Set up the Python environment and module (run once per session)
 setup_copernicus()
 
-# 2. Leer un archivo NetCDF desde Copernicus Marine
+# 2. Read a NetCDF file from Copernicus Marine
 
 data_set = copernicus_open_dataset(
   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
   variables = "zos",
   fecha = "2025-05-12",
-  username = "tu_usuario",
-  password = "tu_password"
+  username = "your_username",
+  password = "your_password"
 )
 
-
-# 3. Descargar un archivo NetCDF desde Copernicus Marine
+# 3. Download a NetCDF file from Copernicus Marine
 copernicus_download(
   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
   variables = "zos",
   fecha = "2025-05-12",
-  username = "tu_usuario",
-  password = "tu_password"
+  username = "your_username",
+  password = "your_password"
 )
-
-
 ```
-
-
