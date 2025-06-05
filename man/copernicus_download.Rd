@@ -36,9 +36,9 @@ copernicus_download(
 
 \item{output_file}{Output file. By default, generates one based on dates.}
 
-\item{username}{Copernicus Marine username (optional, if no config file is used).}
+\item{username}{Copernicus Marine username (optional, will be asked interactively if not provided).}
 
-\item{password}{Copernicus Marine password (optional).}
+\item{password}{Copernicus Marine password (optional, will be asked interactively if not provided).}
 
 \item{verbose_download}{Show detailed messages.}
 
@@ -49,15 +49,4 @@ Absolute path to the downloaded file, or NULL if it fails.
 }
 \description{
 Downloads .nc files from the Copernicus Marine catalog. Allows specifying all options of the Python function.
-}
-\examples{
-\dontrun{
-copernicus_download(
-  dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
-  variables = "zos",
-  start_date = "2025-06-01",
-  end_date = "2025-06-09",
-  username = "my_username", password = "my_password"
-)
-}
 }

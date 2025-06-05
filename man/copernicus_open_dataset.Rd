@@ -33,9 +33,9 @@ copernicus_open_dataset(
 
 \item{dataset_version}{Dataset version. Optional.}
 
-\item{username}{Copernicus Marine username (optional, if no config file is used).}
+\item{username}{Copernicus Marine username (optional, asked interactively if not provided).}
 
-\item{password}{Copernicus Marine password (optional).}
+\item{password}{Copernicus Marine password (optional, asked interactively if not provided).}
 
 \item{verbose_open}{Show detailed messages.}
 
@@ -48,24 +48,4 @@ Python xarray.Dataset object, or NULL if it fails.
 Opens a dataset directly from Copernicus Marine using open_dataset.
 Returns a Python xarray.Dataset object that can be processed in R.
 Useful for exploring data without downloading full files.
-}
-\examples{
-\dontrun{
-# Open full dataset
-ds <- copernicus_open_dataset(
-  dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
-  variables = c("zos", "uo", "vo")
-)
-
-# Open with temporal and spatial filters
-ds <- copernicus_open_dataset(
-  dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
-  variables = "zos",
-  start_date = "2025-06-01",
-  end_date = "2025-06-10",
-  bbox = c(-10, 5, 35, 50),
-  username = "my_username",
-  password = "my_password"
-)
-}
 }

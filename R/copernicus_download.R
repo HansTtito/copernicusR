@@ -11,21 +11,11 @@
 #' @param depth Vector of 2 values: minimum and maximum depth.
 #' @param dataset_version Dataset version.
 #' @param output_file Output file. By default, generates one based on dates.
-#' @param username Copernicus Marine username (optional, if no config file is used).
-#' @param password Copernicus Marine password (optional).
+#' @param username Copernicus Marine username (optional, will be asked interactively if not provided).
+#' @param password Copernicus Marine password (optional, will be asked interactively if not provided).
 #' @param verbose_download Show detailed messages.
 #' @param ... Other extra arguments passed to the Python function.
 #' @return Absolute path to the downloaded file, or NULL if it fails.
-#' @examples
-#' \dontrun{
-#' copernicus_download(
-#'   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
-#'   variables = "zos",
-#'   start_date = "2025-06-01",
-#'   end_date = "2025-06-09",
-#'   username = "my_username", password = "my_password"
-#' )
-#' }
 #' @export
 copernicus_download <- function(dataset_id, variables, start_date, end_date,
                                 bbox = c(-180, 179.92, -80, 90),
@@ -36,6 +26,18 @@ copernicus_download <- function(dataset_id, variables, start_date, end_date,
                                 password = NULL,
                                 verbose_download = TRUE,
                                 ...) {
+
+  # Prompt for username and password if not provided
+  if (is.null(username)) {
+    username <- readline(prompt = "🔑 Enter your Copernicus Marine username: ")
+  }
+  if (is.null(password)) {
+    if (requireNamespace("getPass", quietly = TRUE)) {
+      password <- getPass::getPass("🔑 Enter your Copernicus Marine password: ")
+    } else {
+      password <- readline(prompt = "🔑 Enter your Copernicus Marine password: ")
+    }
+  }
 
   # Check that the environment is configured
   copernicus_env <- .copernicus_env()
@@ -87,12 +89,10 @@ copernicus_download <- function(dataset_id, variables, start_date, end_date,
       minimum_depth = depth[1],
       maximum_depth = depth[2],
       coordinates_selection_method = "strict-inside",
-      output_filename = output_file
+      output_filename = output_file,
+      username = username,
+      password = password
     )
-
-    # Add credentials if provided
-    if (!is.null(username)) args_py$username <- username
-    if (!is.null(password)) args_py$password <- password
 
     # Add additional arguments
     dots <- list(...)
@@ -134,10 +134,7 @@ copernicus_download <- function(dataset_id, variables, start_date, end_date,
       cat("   • That the variables exist in this dataset\n")
       cat("   • Use copernicus_describe() to see available variables\n")
     } else if (grepl("credential|auth|login", e$message, ignore.case = TRUE)) {
-      cat("💡 Authentication issue. Check:\n")
-      cat("   • Your username and password\n")
-      cat("   • The config file ~/.copernicusmarine/configuration_file.txt\n")
-      cat("   • That your Copernicus Marine account is active\n")
+      cat("💡 Authentication issue. Check your username/password.\n")
     } else if (grepl("longitude|latitude|bbox|coordinates", e$message, ignore.case = TRUE)) {
       cat("💡 Coordinate issue. Check:\n")
       cat("   • That bbox is in [xmin, xmax, ymin, ymax] format\n")
@@ -158,18 +155,31 @@ copernicus_download <- function(dataset_id, variables, start_date, end_date,
   })
 }
 
+
 #' @title Test Copernicus integration
 #'
 #' @description
 #' Performs a small test download to validate that the whole system works.
 #'
-#' @param username Copernicus Marine username (optional).
-#' @param password Copernicus Marine password (optional).
+#' @param username Copernicus Marine username (optional). If NULL, will be asked interactively.
+#' @param password Copernicus Marine password (optional). If NULL, will be asked interactively.
 #' @return TRUE if the test was successful.
 #' @export
 copernicus_test <- function(username = NULL, password = NULL) {
-
   cat("🧪 Testing download from Copernicus Marine...\n")
+
+  # Prompt for username and password if not provided
+  if (is.null(username)) {
+    username <- readline(prompt = "🔑 Enter your Copernicus Marine username: ")
+  }
+  if (is.null(password)) {
+    # Use getPass if available for hidden input
+    if (requireNamespace("getPass", quietly = TRUE)) {
+      password <- getPass::getPass("🔑 Enter your Copernicus Marine password: ")
+    } else {
+      password <- readline(prompt = "🔑 Enter your Copernicus Marine password: ")
+    }
+  }
 
   # Use date from 3 days ago for higher chance of success
   test_date <- as.character(Sys.Date() - 3)
@@ -199,7 +209,7 @@ copernicus_test <- function(username = NULL, password = NULL) {
     return(FALSE)
   }
 }
-
+#
 
 #' @title Check if Copernicus Marine Python module is ready
 #'

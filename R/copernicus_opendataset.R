@@ -12,30 +12,11 @@
 #' @param bbox Vector of 4 values (xmin, xmax, ymin, ymax) for the region. Optional.
 #' @param depth Vector of 2 values: minimum and maximum depth. Optional.
 #' @param dataset_version Dataset version. Optional.
-#' @param username Copernicus Marine username (optional, if no config file is used).
-#' @param password Copernicus Marine password (optional).
+#' @param username Copernicus Marine username (optional, asked interactively if not provided).
+#' @param password Copernicus Marine password (optional, asked interactively if not provided).
 #' @param verbose_open Show detailed messages.
 #' @param ... Other extra arguments passed to the Python function.
 #' @return Python xarray.Dataset object, or NULL if it fails.
-#' @examples
-#' \dontrun{
-#' # Open full dataset
-#' ds <- copernicus_open_dataset(
-#'   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
-#'   variables = c("zos", "uo", "vo")
-#' )
-#'
-#' # Open with temporal and spatial filters
-#' ds <- copernicus_open_dataset(
-#'   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
-#'   variables = "zos",
-#'   start_date = "2025-06-01",
-#'   end_date = "2025-06-10",
-#'   bbox = c(-10, 5, 35, 50),
-#'   username = "my_username",
-#'   password = "my_password"
-#' )
-#' }
 #' @export
 copernicus_open_dataset <- function(dataset_id,
                                     variables = NULL,
@@ -48,6 +29,18 @@ copernicus_open_dataset <- function(dataset_id,
                                     password = NULL,
                                     verbose_open = TRUE,
                                     ...) {
+
+  # Prompt for username and password if not provided
+  if (is.null(username)) {
+    username <- readline(prompt = "🔑 Enter your Copernicus Marine username: ")
+  }
+  if (is.null(password)) {
+    if (requireNamespace("getPass", quietly = TRUE)) {
+      password <- getPass::getPass("🔑 Enter your Copernicus Marine password: ")
+    } else {
+      password <- readline(prompt = "🔑 Enter your Copernicus Marine password: ")
+    }
+  }
 
   # Check that the environment is configured
   copernicus_env <- .copernicus_env()
@@ -90,12 +83,8 @@ copernicus_open_dataset <- function(dataset_id,
     if (!is.null(dataset_version)) args_py$dataset_version <- dataset_version
 
     # Temporal filters
-    if (!is.null(start_date)) {
-      args_py$start_datetime <- paste0(start_date, "T00:00:00")
-    }
-    if (!is.null(end_date)) {
-      args_py$end_datetime <- paste0(end_date, "T00:00:00")
-    }
+    if (!is.null(start_date)) args_py$start_datetime <- paste0(start_date, "T00:00:00")
+    if (!is.null(end_date)) args_py$end_datetime <- paste0(end_date, "T00:00:00")
 
     # Spatial filters
     if (!is.null(bbox)) {
@@ -112,8 +101,8 @@ copernicus_open_dataset <- function(dataset_id,
     }
 
     # Credentials
-    if (!is.null(username)) args_py$username <- username
-    if (!is.null(password)) args_py$password <- password
+    args_py$username <- username
+    args_py$password <- password
 
     # Additional arguments
     dots <- list(...)
@@ -142,7 +131,7 @@ copernicus_open_dataset <- function(dataset_id,
     } else if (grepl("variable", e$message, ignore.case = TRUE)) {
       cat("💡 Some variable may not exist in this dataset. Use copernicus_describe() to see available variables.\n")
     } else if (grepl("credential|auth", e$message, ignore.case = TRUE)) {
-      cat("💡 Authentication issue. Check your username/password or config file.\n")
+      cat("💡 Authentication issue. Check your username/password.\n")
     } else if (grepl("longitude|latitude|bbox", e$message, ignore.case = TRUE)) {
       cat("💡 Check that the bbox coordinates are within the dataset's range.\n")
     }
@@ -156,8 +145,8 @@ copernicus_open_dataset <- function(dataset_id,
 #' @description
 #' Performs a test dataset opening to validate that the open_dataset function works.
 #'
-#' @param username Copernicus Marine username (optional).
-#' @param password Copernicus Marine password (optional).
+#' @param username Copernicus Marine username (optional, will be asked interactively if not provided).
+#' @param password Copernicus Marine password (optional, will be asked interactively if not provided).
 #' @return TRUE if the test was successful.
 #' @export
 copernicus_test_open <- function(username = NULL, password = NULL) {

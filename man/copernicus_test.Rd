@@ -7,9 +7,9 @@
 copernicus_test(username = NULL, password = NULL)
 }
 \arguments{
-\item{username}{Copernicus Marine username (optional).}
+\item{username}{Copernicus Marine username (optional). If NULL, will be asked interactively.}
 
-\item{password}{Copernicus Marine password (optional).}
+\item{password}{Copernicus Marine password (optional). If NULL, will be asked interactively.}
 }
 \value{
 TRUE if the test was successful.
