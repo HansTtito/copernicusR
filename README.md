@@ -36,22 +36,31 @@ library(copernicusR)
 # 1. Set up the Python environment and module (run once per session)
 setup_copernicus()
 
-# 2. Read a NetCDF file from Copernicus Marine
+# 2. Check if everything is ready
+copernicus_is_ready()
 
-data_set = copernicus_open_dataset(
+# 3. Perform a quick test download
+copernicus_test()
+
+# 4. Read a NetCDF file from Copernicus Marine
+data_set <- copernicus_open_dataset(
   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
   variables = "zos",
-  fecha = "2025-05-12",
+  start_date = "2025-05-12",
   username = "your_username",
   password = "your_password"
 )
 
-# 3. Download a NetCDF file from Copernicus Marine
+# 5. Download a NetCDF file from Copernicus Marine
 copernicus_download(
   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
   variables = "zos",
-  fecha = "2025-05-12",
+  start_date = "2025-05-12",
+  end_date = "2025-05-12",
   username = "your_username",
   password = "your_password"
 )
+
+
+
 ```
