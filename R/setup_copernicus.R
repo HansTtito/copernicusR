@@ -1,11 +1,11 @@
-#' @title Configura la integración con Copernicus Marine (Python)
+#' @title Set up Copernicus Marine integration (Python)
 #'
 #' @description
-#' Configura el entorno Python y carga el módulo copernicusmarine para su uso en R.
-#' Se recomienda ejecutar una sola vez por sesión antes de llamar a otras funciones del paquete.
+#' Sets up the Python environment and loads the copernicusmarine module for use in R.
+#' It is recommended to run this once per session before calling other functions in the package.
 #'
-#' @param install_copernicus Lógico. ¿Instalar el paquete copernicusmarine en Python si no está disponible? Default: TRUE.
-#' @return Invisible TRUE si la configuración fue exitosa.
+#' @param install_copernicus Logical. Should the copernicusmarine package be installed in Python if not available? Default: TRUE.
+#' @return Invisible TRUE if the configuration was successful.
 #' @examples
 #' setup_copernicus()
 #' @export
@@ -19,15 +19,15 @@ setup_copernicus <- function(install_copernicus = TRUE) {
   invisible(TRUE)
 }
 
-#' @title Reinstalar el paquete Python copernicusmarine
+#' @title Reinstall the Python package copernicusmarine
 #'
 #' @description
-#' Reinstala el módulo copernicusmarine en el entorno Python detectado.
-#' @return Invisible TRUE si se instala correctamente.
+#' Reinstalls the copernicusmarine module in the detected Python environment.
+#' @return Invisible TRUE if successfully installed.
 #' @export
 copernicus_reinstall_package <- function() {
   py <- copernicus_configure_python()
   reticulate::py_install("copernicusmarine", pip = TRUE, force = TRUE)
-  cat("✅ copernicusmarine reinstalado\n")
+  cat("✅ copernicusmarine reinstalled\n")
   invisible(TRUE)
 }

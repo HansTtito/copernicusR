@@ -1,103 +1,103 @@
-#' @title Abrir dataset desde Copernicus Marine sin descarga
+#' @title Open dataset from Copernicus Marine without download
 #'
 #' @description
-#' Abre un dataset directamente desde Copernicus Marine usando open_dataset.
-#' Retorna un objeto xarray.Dataset que puede ser procesado en R.
-#' Útil para explorar datos sin descargar archivos completos.
+#' Opens a dataset directly from Copernicus Marine using open_dataset.
+#' Returns a Python xarray.Dataset object that can be processed in R.
+#' Useful for exploring data without downloading full files.
 #'
-#' @param dataset_id ID del dataset (exacto).
-#' @param variables Vector o lista de variables a abrir. Si es NULL, abre todas.
-#' @param fecha_inicio Fecha de inicio (YYYY-MM-DD). Opcional.
-#' @param fecha_fin Fecha de fin (YYYY-MM-DD). Opcional.
-#' @param bbox Vector de 4 valores (xmin, xmax, ymin, ymax) para la región. Opcional.
-#' @param profundidad Vector de 2 valores: profundidad mínima y máxima. Opcional.
-#' @param dataset_version Versión del dataset. Opcional.
-#' @param username Usuario Copernicus Marine (opcional, si no se usa archivo config).
-#' @param password Contraseña Copernicus Marine (opcional).
-#' @param verbose_open Mostrar mensajes detallados.
-#' @param ... Otros argumentos extra pasados a la función Python.
-#' @return Objeto xarray.Dataset de Python, o NULL si falla.
+#' @param dataset_id ID of the dataset (exact).
+#' @param variables Vector or list of variables to open. If NULL, opens all.
+#' @param start_date Start date (YYYY-MM-DD). Optional.
+#' @param end_date End date (YYYY-MM-DD). Optional.
+#' @param bbox Vector of 4 values (xmin, xmax, ymin, ymax) for the region. Optional.
+#' @param depth Vector of 2 values: minimum and maximum depth. Optional.
+#' @param dataset_version Dataset version. Optional.
+#' @param username Copernicus Marine username (optional, if no config file is used).
+#' @param password Copernicus Marine password (optional).
+#' @param verbose_open Show detailed messages.
+#' @param ... Other extra arguments passed to the Python function.
+#' @return Python xarray.Dataset object, or NULL if it fails.
 #' @examples
 #' \dontrun{
-#' # Abrir dataset completo
+#' # Open full dataset
 #' ds <- copernicus_open_dataset(
 #'   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
 #'   variables = c("zos", "uo", "vo")
 #' )
 #'
-#' # Abrir con filtros temporales y espaciales
+#' # Open with temporal and spatial filters
 #' ds <- copernicus_open_dataset(
 #'   dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
 #'   variables = "zos",
-#'   fecha_inicio = "2025-06-01",
-#'   fecha_fin = "2025-06-10",
+#'   start_date = "2025-06-01",
+#'   end_date = "2025-06-10",
 #'   bbox = c(-10, 5, 35, 50),
-#'   username = "mi_usuario",
-#'   password = "mi_contrasena"
+#'   username = "my_username",
+#'   password = "my_password"
 #' )
 #' }
 #' @export
 copernicus_open_dataset <- function(dataset_id,
                                     variables = NULL,
-                                    fecha_inicio = NULL,
-                                    fecha_fin = NULL,
+                                    start_date = NULL,
+                                    end_date = NULL,
                                     bbox = NULL,
-                                    profundidad = NULL,
+                                    depth = NULL,
                                     dataset_version = NULL,
                                     username = NULL,
                                     password = NULL,
                                     verbose_open = TRUE,
                                     ...) {
 
-  # Verificar que el entorno esté configurado
+  # Check that the environment is configured
   copernicus_env <- .copernicus_env()
   if (!exists("cm", envir = copernicus_env)) {
-    stop("❌ Copernicus Marine no está configurado. Ejecuta setup_copernicus() primero.")
+    stop("❌ Copernicus Marine is not configured. Run setup_copernicus() first.")
   }
 
   cm <- get("cm", envir = copernicus_env)
 
-  # Convertir variables a formato Python si se especifican
+  # Convert variables to Python format if specified
   variables_py <- NULL
   if (!is.null(variables)) {
     variables_py <- reticulate::r_to_py(as.list(variables))
   }
 
   if (verbose_open) {
-    cat("🌊 Abriendo dataset:", dataset_id, "\n")
+    cat("🌊 Opening dataset:", dataset_id, "\n")
     if (!is.null(variables)) {
       cat("📊 Variables:", paste(variables, collapse = ", "), "\n")
     } else {
-      cat("📊 Variables: todas disponibles\n")
+      cat("📊 Variables: all available\n")
     }
-    if (!is.null(fecha_inicio) || !is.null(fecha_fin)) {
-      cat("📅 Periodo:", fecha_inicio, "a", fecha_fin, "\n")
+    if (!is.null(start_date) || !is.null(end_date)) {
+      cat("📅 Period:", start_date, "to", end_date, "\n")
     }
     if (!is.null(bbox)) {
-      cat("🗺️  Región: lon[", bbox[1], ",", bbox[2], "] lat[", bbox[3], ",", bbox[4], "]\n")
+      cat("🗺️  Region: lon[", bbox[1], ",", bbox[2], "] lat[", bbox[3], ",", bbox[4], "]\n")
     }
-    cat("⏳ Conectando con Copernicus Marine...\n\n")
+    cat("⏳ Connecting to Copernicus Marine...\n\n")
   }
 
   start_time <- Sys.time()
 
   tryCatch({
-    # Construir argumentos para open_dataset
+    # Build arguments for open_dataset
     args_py <- list(dataset_id = dataset_id)
 
-    # Agregar argumentos opcionales solo si se especifican
+    # Add optional arguments only if specified
     if (!is.null(variables_py)) args_py$variables <- variables_py
     if (!is.null(dataset_version)) args_py$dataset_version <- dataset_version
 
-    # Filtros temporales
-    if (!is.null(fecha_inicio)) {
-      args_py$start_datetime <- paste0(fecha_inicio, "T00:00:00")
+    # Temporal filters
+    if (!is.null(start_date)) {
+      args_py$start_datetime <- paste0(start_date, "T00:00:00")
     }
-    if (!is.null(fecha_fin)) {
-      args_py$end_datetime <- paste0(fecha_fin, "T00:00:00")
+    if (!is.null(end_date)) {
+      args_py$end_datetime <- paste0(end_date, "T00:00:00")
     }
 
-    # Filtros espaciales
+    # Spatial filters
     if (!is.null(bbox)) {
       args_py$minimum_longitude <- bbox[1]
       args_py$maximum_longitude <- bbox[2]
@@ -105,64 +105,64 @@ copernicus_open_dataset <- function(dataset_id,
       args_py$maximum_latitude <- bbox[4]
     }
 
-    # Filtros de profundidad
-    if (!is.null(profundidad)) {
-      args_py$minimum_depth <- profundidad[1]
-      args_py$maximum_depth <- profundidad[2]
+    # Depth filters
+    if (!is.null(depth)) {
+      args_py$minimum_depth <- depth[1]
+      args_py$maximum_depth <- depth[2]
     }
 
-    # Credenciales
+    # Credentials
     if (!is.null(username)) args_py$username <- username
     if (!is.null(password)) args_py$password <- password
 
-    # Argumentos adicionales
+    # Additional arguments
     dots <- list(...)
     if (length(dots) > 0) args_py <- c(args_py, dots)
 
-    # Llamar a open_dataset
+    # Call open_dataset
     dataset <- do.call(cm$open_dataset, args_py)
 
     end_time <- Sys.time()
     time_secs <- round(difftime(end_time, start_time, units = "secs"), 2)
 
     if (verbose_open) {
-      cat("✅ ¡Dataset abierto exitosamente!\n")
-      cat("⏱️  Tiempo de conexión:", time_secs, "segundos\n")
-      cat("📋 Usa reticulate::py_to_r() para convertir a R si es necesario\n")
+      cat("✅ Dataset successfully opened!\n")
+      cat("⏱️  Connection time:", time_secs, "seconds\n")
+      cat("📋 Use reticulate::py_to_r() to convert to R if needed\n")
     }
 
     return(dataset)
 
   }, error = function(e) {
-    cat("❌ Error al abrir dataset:", e$message, "\n")
+    cat("❌ Error opening dataset:", e$message, "\n")
 
-    # Mensajes de ayuda específicos
+    # Specific help messages
     if (grepl("date|time", e$message, ignore.case = TRUE)) {
-      cat("💡 Las fechas pueden no estar disponibles. Verifica el rango temporal del dataset.\n")
+      cat("💡 Dates may not be available. Check the dataset's temporal range.\n")
     } else if (grepl("variable", e$message, ignore.case = TRUE)) {
-      cat("💡 Alguna variable puede no existir en este dataset. Usa copernicus_describe() para ver variables disponibles.\n")
+      cat("💡 Some variable may not exist in this dataset. Use copernicus_describe() to see available variables.\n")
     } else if (grepl("credential|auth", e$message, ignore.case = TRUE)) {
-      cat("💡 Problema de autenticación. Verifica usuario/contraseña o archivo de configuración.\n")
+      cat("💡 Authentication issue. Check your username/password or config file.\n")
     } else if (grepl("longitude|latitude|bbox", e$message, ignore.case = TRUE)) {
-      cat("💡 Verifica que las coordenadas del bbox estén dentro del rango del dataset.\n")
+      cat("💡 Check that the bbox coordinates are within the dataset's range.\n")
     }
 
     return(NULL)
   })
 }
 
-#' @title Probar apertura de dataset Copernicus
+#' @title Test opening of Copernicus dataset
 #'
 #' @description
-#' Realiza una prueba de apertura de dataset para validar que la función open_dataset funcione.
+#' Performs a test dataset opening to validate that the open_dataset function works.
 #'
-#' @param username Usuario Copernicus Marine (opcional).
-#' @param password Contraseña Copernicus Marine (opcional).
-#' @return TRUE si la prueba fue exitosa.
+#' @param username Copernicus Marine username (optional).
+#' @param password Copernicus Marine password (optional).
+#' @return TRUE if the test was successful.
 #' @export
 copernicus_test_open <- function(username = NULL, password = NULL) {
 
-  cat("🧪 Probando apertura de dataset...\n")
+  cat("🧪 Testing dataset opening...\n")
 
   dataset <- copernicus_open_dataset(
     dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
@@ -174,11 +174,11 @@ copernicus_test_open <- function(username = NULL, password = NULL) {
   )
 
   if (!is.null(dataset)) {
-    cat("✅ ¡open_dataset funcionando perfectamente!\n")
-    cat("📊 Dataset conectado exitosamente\n")
+    cat("✅ open_dataset working perfectly!\n")
+    cat("📊 Dataset connected successfully\n")
     return(TRUE)
   } else {
-    cat("❌ Error en prueba de open_dataset\n")
+    cat("❌ Error in open_dataset test\n")
     return(FALSE)
   }
 }

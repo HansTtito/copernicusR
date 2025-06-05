@@ -1,9 +1,9 @@
-#' Buscar e inicializar Python en cualquier sistema operativo (uso interno)
+#' Search and initialize Python on any operating system (internal use)
 #'
-#' Busca el ejecutable de Python en rutas comunes y en el PATH del sistema.
-#' Si lo encuentra, lo inicializa mediante reticulate.
+#' Searches for the Python executable in common paths and the system PATH.
+#' If found, it initializes it via reticulate.
 #'
-#' @return La configuración de Python detectada (objeto py_config).
+#' @return The detected Python configuration (py_config object).
 #' @keywords internal
 copernicus_configure_python <- function() {
   if (!requireNamespace("reticulate", quietly = TRUE)) install.packages("reticulate")
@@ -25,45 +25,45 @@ copernicus_configure_python <- function() {
   }
   if (!is.null(python_found)) {
     use_python(python_found, required = TRUE)
-    cat("✅ Usando Python en:", python_found, "\n")
+    cat("✅ Using Python at:", python_found, "\n")
   } else {
     py_config <- py_discover_config()
     viable_pythons <- py_config$python_versions[!grepl("WindowsApps", py_config$python_versions)]
     if (length(viable_pythons) > 0) {
       use_python(viable_pythons[1], required = TRUE)
-      cat("✅ Usando Python detectado automáticamente:", viable_pythons[1], "\n")
+      cat("✅ Automatically detected Python:", viable_pythons[1], "\n")
     } else {
-      stop("❌ No se encontró Python fuera de WindowsApps. Instala Python desde https://www.python.org/downloads/ y agrega a PATH.")
+      stop("❌ No Python found outside of WindowsApps. Please install Python from https://www.python.org/downloads/ and add it to PATH.")
     }
   }
   return(py_config())
 }
 
-#' Instalar el paquete Python copernicusmarine (uso interno)
+#' Install the Python package copernicusmarine (internal use)
 #'
-#' @param py Objeto de configuración Python.
-#' @return Invisible TRUE si la instalación es exitosa.
+#' @param py Python configuration object.
+#' @return Invisible TRUE if the installation is successful.
 #' @keywords internal
 copernicus_install_package <- function(py) {
   tryCatch({
     reticulate::py_install("copernicusmarine", pip = TRUE)
-    cat("   ✅ copernicusmarine instalado\n")
+    cat("   ✅ copernicusmarine installed\n")
   }, error = function(e) {
-    cat("   ⚠️  Error instalando copernicusmarine, intentando manualmente con pip...\n")
+    cat("   ⚠️  Error installing copernicusmarine, attempting manual pip install...\n")
     system("pip install copernicusmarine")
   })
   invisible(TRUE)
 }
 
-#' Importar el módulo copernicusmarine de Python (uso interno)
+#' Import the copernicusmarine Python module (internal use)
 #'
-#' @param py Objeto de configuración Python.
-#' @return Módulo copernicusmarine importado.
+#' @param py Python configuration object.
+#' @return Imported copernicusmarine module.
 #' @keywords internal
 copernicus_import_module <- function(py) {
   tryCatch({
     reticulate::import("copernicusmarine")
   }, error = function(e) {
-    stop("❌ No se pudo importar copernicusmarine. Ejecuta: copernicus_reinstall_package()")
+    stop("❌ Could not import copernicusmarine. Run: copernicus_reinstall_package()")
   })
 }
