@@ -1,19 +1,20 @@
 test_that(".copernicus_env creates and returns environment", {
-  # Clear any existing environment
-  if (exists(".copernicus_internal_env", envir = .GlobalEnv)) {
-    rm(".copernicus_internal_env", envir = .GlobalEnv)
-  }
-
   # Get environment (should create it)
-  env1 <- .copernicus_env()
+  env1 <- copernicusR:::.copernicus_env()
   expect_true(is.environment(env1))
 
   # Get it again (should return same environment)
-  env2 <- .copernicus_env()
+  env2 <- copernicusR:::.copernicus_env()
   expect_identical(env1, env2)
 
-  # Check it exists in global environment
-  expect_true(exists(".copernicus_internal_env", envir = .GlobalEnv))
+  # Verify environment works by storing and retrieving a value
+  test_key <- "test_key"
+  test_value <- "test_value"
+  assign(test_key, test_value, envir = env1)
+  expect_equal(get(test_key, envir = env2), test_value)
+
+  # Clean up test value
+  rm(list = test_key, envir = env1)
 })
 
 test_that("copernicus_is_ready checks module availability", {
