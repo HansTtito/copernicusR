@@ -13,5 +13,7 @@ Logical. TRUE if credentials are valid, FALSE otherwise.
 Tests if the stored credentials work by attempting a simple API call.
 }
 \examples{
+\dontrun{
 copernicus_validate_credentials()
+}
 }

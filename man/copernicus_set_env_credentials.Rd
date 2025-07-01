@@ -21,6 +21,8 @@ Helper function to set credentials in .Renviron file for persistent storage.
 This is more secure than storing in scripts.
 }
 \examples{
+\dontrun{
 # Set credentials in .Renviron (will persist across R sessions)
 copernicus_set_env_credentials("your_username", "your_password")
+}
 }

@@ -8,8 +8,13 @@ Description: Permite configurar, explorar y descargar datos del servicio Coperni
 Depends: R (>= 3.5.0)
 Imports: 
     reticulate
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+Suggests: 
+    getPass,
+    testthat (>= 3.0.0),
+    withr
+Config/testthat/edition: 3

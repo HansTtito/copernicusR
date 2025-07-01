@@ -33,6 +33,7 @@ Sets up Copernicus Marine Service credentials using various methods:
 }
 }
 \examples{
+\dontrun{
 # Set credentials directly
 copernicus_setup_credentials("username", "password")
 
@@ -41,4 +42,5 @@ copernicus_setup_credentials("username", "password", store_credentials = TRUE)
 
 # Try to get from environment/options
 copernicus_setup_credentials()
+}
 }

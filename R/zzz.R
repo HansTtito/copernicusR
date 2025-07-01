@@ -1,6 +1,3 @@
-# zzz.R
-# Entorno interno del paquete (sin cambios)
-
 #' Copernicus private environment (internal use)
 #'
 #' This function creates (if it doesn't already exist) and returns the internal environment

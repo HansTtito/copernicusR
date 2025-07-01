@@ -1,6 +1,3 @@
-# setup_copernicus.R
-# Sistema completo de configuración y manejo de credenciales
-
 #' @title Set up Copernicus Marine integration with credentials
 #'
 #' @description
@@ -14,6 +11,7 @@
 #' @param store_credentials Logical. Should credentials be stored in session options? Default: TRUE.
 #' @return Invisible TRUE if the configuration was successful.
 #' @examples
+#' \dontrun{
 #' # Basic setup without credentials
 #' setup_copernicus()
 #'
@@ -25,6 +23,8 @@
 #'
 #' # Setup and store credentials for session
 #' setup_copernicus(username = "user", password = "pass", store_credentials = TRUE)
+#' }
+#' @importFrom reticulate py_config
 #' @export
 setup_copernicus <- function(install_copernicus = TRUE,
                              username = NULL,
@@ -62,6 +62,7 @@ setup_copernicus <- function(install_copernicus = TRUE,
 #' @param prompt_if_missing Logical. Prompt user for credentials if not found? Default: TRUE.
 #' @return Invisible list with username and password (password is masked).
 #' @examples
+#' \dontrun{
 #' # Set credentials directly
 #' copernicus_setup_credentials("username", "password")
 #'
@@ -70,6 +71,7 @@ setup_copernicus <- function(install_copernicus = TRUE,
 #'
 #' # Try to get from environment/options
 #' copernicus_setup_credentials()
+#' }
 #' @export
 copernicus_setup_credentials <- function(username = NULL,
                                          password = NULL,
@@ -116,14 +118,14 @@ copernicus_setup_credentials <- function(username = NULL,
   if (store_credentials && !is.null(username) && !is.null(password)) {
     options(copernicus.username = username)
     options(copernicus.password = password)
-    cat("✅ Copernicus credentials stored in session options\n")
+    cat("Copernicus credentials stored in session options\n")
   }
 
   # Validate credentials
   if (!is.null(username) && !is.null(password)) {
-    cat("✅ Copernicus credentials configured for user:", username, "\n")
+    cat("Copernicus credentials configured for user:", username, "\n")
   } else {
-    warning("⚠️  Copernicus credentials not fully configured. Some functions may require authentication.")
+    warning("Copernicus credentials not fully configured. Some functions may require authentication.")
   }
 
   # Return credentials (with masked password)
@@ -180,7 +182,7 @@ copernicus_get_credentials <- function(mask_password = TRUE) {
 copernicus_clear_credentials <- function() {
   options(copernicus.username = NULL)
   options(copernicus.password = NULL)
-  cat("✅ Copernicus credentials cleared from session\n")
+  cat("Copernicus credentials cleared from session\n")
   invisible(TRUE)
 }
 
@@ -195,8 +197,10 @@ copernicus_clear_credentials <- function() {
 #' @param overwrite Logical. Overwrite existing credentials in .Renviron? Default: FALSE.
 #' @return Invisible TRUE if successful.
 #' @examples
+#' \dontrun{
 #' # Set credentials in .Renviron (will persist across R sessions)
 #' copernicus_set_env_credentials("your_username", "your_password")
+#' }
 #' @export
 copernicus_set_env_credentials <- function(username, password, overwrite = FALSE) {
 
@@ -239,8 +243,8 @@ copernicus_set_env_credentials <- function(username, password, overwrite = FALSE
   # Write back to .Renviron
   writeLines(env_lines, env_file)
 
-  cat("✅ Copernicus credentials added to .Renviron\n")
-  cat("ℹ️  Restart R session for changes to take effect\n")
+  cat("Copernicus credentials added to .Renviron\n")
+  cat("Restart R session for changes to take effect\n")
 
   invisible(TRUE)
 }
@@ -252,18 +256,20 @@ copernicus_set_env_credentials <- function(username, password, overwrite = FALSE
 #'
 #' @return Logical. TRUE if credentials are valid, FALSE otherwise.
 #' @examples
+#' \dontrun{
 #' copernicus_validate_credentials()
+#' }
 #' @export
 copernicus_validate_credentials <- function() {
 
   credentials <- copernicus_get_credentials(mask_password = FALSE)
 
   if (is.null(credentials$username) || is.null(credentials$password)) {
-    cat("❌ No credentials found. Use copernicus_setup_credentials() first.\n")
+    cat("No credentials found. Use copernicus_setup_credentials() first.\n")
     return(FALSE)
   }
 
-  cat("🔍 Validating credentials for user:", credentials$username, "...\n")
+  cat("Validating credentials for user:", credentials$username, "...\n")
 
   # Attempt validation (this would need to be implemented based on the API)
   # For now, just return TRUE if credentials exist
@@ -271,12 +277,12 @@ copernicus_validate_credentials <- function() {
     # Here you would make an actual API call to validate
     # For example: test_connection <- cm$login(credentials$username, credentials$password)
 
-    cat("✅ Credentials appear to be configured correctly\n")
-    cat("ℹ️  Note: Full validation requires API connection\n")
+    cat("Credentials appear to be configured correctly\n")
+    cat("Note: Full validation requires API connection\n")
     return(TRUE)
 
   }, error = function(e) {
-    cat("❌ Credential validation failed:", e$message, "\n")
+    cat("Credential validation failed:", e$message, "\n")
     return(FALSE)
   })
 }

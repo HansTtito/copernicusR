@@ -29,6 +29,7 @@ Optionally configures Copernicus Marine credentials for the session.
 It is recommended to run this once per session before calling other functions in the package.
 }
 \examples{
+\dontrun{
 # Basic setup without credentials
 setup_copernicus()
 
@@ -40,4 +41,5 @@ setup_copernicus()  # Will look for COPERNICUS_USERNAME and COPERNICUS_PASSWORD
 
 # Setup and store credentials for session
 setup_copernicus(username = "user", password = "pass", store_credentials = TRUE)
+}
 }
