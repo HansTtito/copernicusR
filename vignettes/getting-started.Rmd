@@ -15,8 +15,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Getting Started with copernicusR
-
 This vignette shows how to set up and use copernicusR to access Copernicus Marine data.
 
 ## Prerequisites
