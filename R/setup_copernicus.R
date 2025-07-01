@@ -191,16 +191,22 @@ copernicus_get_credentials <- function(mask_password = TRUE) {
 #' @title Clear Copernicus Marine credentials
 #'
 #' @description
-#' Removes stored Copernicus Marine credentials from session options.
+#' Removes stored Copernicus Marine credentials from session options and environment variables.
 #'
 #' @return Invisible TRUE.
 #' @examples
 #' copernicus_clear_credentials()
 #' @export
 copernicus_clear_credentials <- function() {
+  # Remove from options
   options(copernicus.username = NULL)
   options(copernicus.password = NULL)
-  cat("Copernicus credentials cleared from session\n")
+
+  # Remove from environment (current session only)
+  Sys.unsetenv("COPERNICUS_USERNAME")
+  Sys.unsetenv("COPERNICUS_PASSWORD")
+
+  cat("✅ Copernicus credentials cleared from session and environment\n")
   invisible(TRUE)
 }
 

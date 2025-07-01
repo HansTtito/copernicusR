@@ -10,7 +10,7 @@ copernicus_clear_credentials()
 Invisible TRUE.
 }
 \description{
-Removes stored Copernicus Marine credentials from session options.
+Removes stored Copernicus Marine credentials from session options and environment variables.
 }
 \examples{
 copernicus_clear_credentials()
