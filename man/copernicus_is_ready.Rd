@@ -10,9 +10,9 @@ copernicus_is_ready(verbose = TRUE)
 \item{verbose}{Show detailed status information.}
 }
 \value{
-TRUE if the Python module is loaded and ready.
+TRUE if the Python module is loaded and credentials are available.
 }
 \description{
-Checks if the Python module is properly loaded to use Copernicus Marine.
-Returns TRUE if the module exists.
+Checks if the Python module is properly loaded and credentials are configured
+to use Copernicus Marine. Returns TRUE if everything is ready.
 }

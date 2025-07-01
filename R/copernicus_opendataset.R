@@ -1,9 +1,13 @@
+# copernicus_opendataset.R
+# Funciones para abrir datasets directamente con credenciales integradas
+
 #' @title Open dataset from Copernicus Marine without download
 #'
 #' @description
 #' Opens a dataset directly from Copernicus Marine using open_dataset.
 #' Returns a Python xarray.Dataset object that can be processed in R.
 #' Useful for exploring data without downloading full files.
+#' Uses stored credentials from options/environment variables if available.
 #'
 #' @param dataset_id ID of the dataset (exact).
 #' @param variables Vector or list of variables to open. If NULL, opens all.
@@ -12,8 +16,8 @@
 #' @param bbox Vector of 4 values (xmin, xmax, ymin, ymax) for the region. Optional.
 #' @param depth Vector of 2 values: minimum and maximum depth. Optional.
 #' @param dataset_version Dataset version. Optional.
-#' @param username Copernicus Marine username (optional, asked interactively if not provided).
-#' @param password Copernicus Marine password (optional, asked interactively if not provided).
+#' @param username Copernicus Marine username (optional, will try to get from stored credentials).
+#' @param password Copernicus Marine password (optional, will try to get from stored credentials).
 #' @param verbose_open Show detailed messages.
 #' @param ... Other extra arguments passed to the Python function.
 #' @return Python xarray.Dataset object, or NULL if it fails.
@@ -30,16 +34,34 @@ copernicus_open_dataset <- function(dataset_id,
                                     verbose_open = TRUE,
                                     ...) {
 
-  # Prompt for username and password if not provided
+  # Get credentials using the centralized system
+  credentials <- copernicus_get_credentials(mask_password = FALSE)
+
+  # Use provided parameters or fall back to stored credentials
   if (is.null(username)) {
+    username <- credentials$username
+  }
+  if (is.null(password)) {
+    password <- credentials$password
+  }
+
+  # If still no credentials, prompt interactively
+  if (is.null(username)) {
+    cat("ℹ️  No username found in stored credentials.\n")
     username <- readline(prompt = "🔑 Enter your Copernicus Marine username: ")
   }
   if (is.null(password)) {
+    cat("ℹ️  No password found in stored credentials.\n")
     if (requireNamespace("getPass", quietly = TRUE)) {
       password <- getPass::getPass("🔑 Enter your Copernicus Marine password: ")
     } else {
       password <- readline(prompt = "🔑 Enter your Copernicus Marine password: ")
     }
+  }
+
+  # Validate we have both credentials
+  if (is.null(username) || is.null(password) || username == "" || password == "") {
+    stop("❌ Username and password are required. Use copernicus_setup_credentials() to store them.")
   }
 
   # Check that the environment is configured
@@ -68,6 +90,9 @@ copernicus_open_dataset <- function(dataset_id,
     }
     if (!is.null(bbox)) {
       cat("🗺️  Region: lon[", bbox[1], ",", bbox[2], "] lat[", bbox[3], ",", bbox[4], "]\n")
+    }
+    if (!is.null(depth)) {
+      cat("🌊 Depth:", depth[1], "to", depth[2], "m\n")
     }
     cat("⏳ Connecting to Copernicus Marine...\n\n")
   }
@@ -134,6 +159,14 @@ copernicus_open_dataset <- function(dataset_id,
       cat("💡 Authentication issue. Check your username/password.\n")
     } else if (grepl("longitude|latitude|bbox", e$message, ignore.case = TRUE)) {
       cat("💡 Check that the bbox coordinates are within the dataset's range.\n")
+    } else if (grepl("depth", e$message, ignore.case = TRUE)) {
+      cat("💡 Depth issue. Check:\n")
+      cat("   • That the dataset has depth data\n")
+      cat("   • That the values are within the available range\n")
+    } else if (grepl("network|connection|timeout", e$message, ignore.case = TRUE)) {
+      cat("💡 Connection issue. Try:\n")
+      cat("   • Checking your internet connection\n")
+      cat("   • Retrying the connection later\n")
     }
 
     return(NULL)
@@ -144,14 +177,47 @@ copernicus_open_dataset <- function(dataset_id,
 #'
 #' @description
 #' Performs a test dataset opening to validate that the open_dataset function works.
+#' Uses stored credentials if available.
 #'
-#' @param username Copernicus Marine username (optional, will be asked interactively if not provided).
-#' @param password Copernicus Marine password (optional, will be asked interactively if not provided).
+#' @param username Copernicus Marine username (optional, will try to get from stored credentials first).
+#' @param password Copernicus Marine password (optional, will try to get from stored credentials first).
 #' @return TRUE if the test was successful.
 #' @export
 copernicus_test_open <- function(username = NULL, password = NULL) {
 
   cat("🧪 Testing dataset opening...\n")
+
+  # Get credentials using the centralized system
+  credentials <- copernicus_get_credentials(mask_password = FALSE)
+
+  # Use provided parameters or fall back to stored credentials
+  if (is.null(username)) {
+    username <- credentials$username
+  }
+  if (is.null(password)) {
+    password <- credentials$password
+  }
+
+  # If still no credentials, prompt interactively
+  if (is.null(username)) {
+    cat("ℹ️  No username found in stored credentials.\n")
+    username <- readline(prompt = "🔑 Enter your Copernicus Marine username: ")
+  }
+  if (is.null(password)) {
+    cat("ℹ️  No password found in stored credentials.\n")
+    if (requireNamespace("getPass", quietly = TRUE)) {
+      password <- getPass::getPass("🔑 Enter your Copernicus Marine password: ")
+    } else {
+      password <- readline(prompt = "🔑 Enter your Copernicus Marine password: ")
+    }
+  }
+
+  # Validate we have both credentials
+  if (is.null(username) || is.null(password) || username == "" || password == "") {
+    cat("❌ Username and password are required.\n")
+    cat("💡 Use copernicus_setup_credentials() to store them.\n")
+    return(FALSE)
+  }
 
   dataset <- copernicus_open_dataset(
     dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",

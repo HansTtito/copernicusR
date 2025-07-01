@@ -1,6 +1,9 @@
+# zzz.R
+# Entorno interno del paquete (sin cambios)
+
 #' Copernicus private environment (internal use)
 #'
-#' This function creates (if it doesn’t already exist) and returns the internal environment
+#' This function creates (if it doesn't already exist) and returns the internal environment
 #' where the package stores persistent objects (e.g., the Python module, configurations, etc.).
 #' It is used to avoid polluting the user's global environment and to maintain
 #' references between the package's internal functions.

@@ -7,13 +7,14 @@
 copernicus_test_open(username = NULL, password = NULL)
 }
 \arguments{
-\item{username}{Copernicus Marine username (optional, will be asked interactively if not provided).}
+\item{username}{Copernicus Marine username (optional, will try to get from stored credentials first).}
 
-\item{password}{Copernicus Marine password (optional, will be asked interactively if not provided).}
+\item{password}{Copernicus Marine password (optional, will try to get from stored credentials first).}
 }
 \value{
 TRUE if the test was successful.
 }
 \description{
 Performs a test dataset opening to validate that the open_dataset function works.
+Uses stored credentials if available.
 }

@@ -7,13 +7,14 @@
 copernicus_test(username = NULL, password = NULL)
 }
 \arguments{
-\item{username}{Copernicus Marine username (optional). If NULL, will be asked interactively.}
+\item{username}{Copernicus Marine username (optional). Will try to get from stored credentials first.}
 
-\item{password}{Copernicus Marine password (optional). If NULL, will be asked interactively.}
+\item{password}{Copernicus Marine password (optional). Will try to get from stored credentials first.}
 }
 \value{
 TRUE if the test was successful.
 }
 \description{
 Performs a small test download to validate that the whole system works.
+Uses stored credentials if available.
 }

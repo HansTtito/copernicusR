@@ -1,3 +1,6 @@
+# copernicus_python.R
+# Funciones internas para configuración de Python (sin cambios)
+
 #' Search and initialize Python on any operating system (internal use)
 #'
 #' Searches for the Python executable in common paths and the system PATH.

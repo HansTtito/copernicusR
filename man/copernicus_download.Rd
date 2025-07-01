@@ -36,9 +36,9 @@ copernicus_download(
 
 \item{output_file}{Output file. By default, generates one based on dates.}
 
-\item{username}{Copernicus Marine username (optional, will be asked interactively if not provided).}
+\item{username}{Copernicus Marine username (optional, will try to get from stored credentials).}
 
-\item{password}{Copernicus Marine password (optional, will be asked interactively if not provided).}
+\item{password}{Copernicus Marine password (optional, will try to get from stored credentials).}
 
 \item{verbose_download}{Show detailed messages.}
 
@@ -49,4 +49,5 @@ Absolute path to the downloaded file, or NULL if it fails.
 }
 \description{
 Downloads .nc files from the Copernicus Marine catalog. Allows specifying all options of the Python function.
+Uses stored credentials from options/environment variables if available.
 }

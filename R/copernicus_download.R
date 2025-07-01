@@ -1,7 +1,11 @@
+# copernicus_download.R
+# Funciones de descarga y test con sistema de credenciales integrado
+
 #' @title Download data from Copernicus Marine
 #'
 #' @description
 #' Downloads .nc files from the Copernicus Marine catalog. Allows specifying all options of the Python function.
+#' Uses stored credentials from options/environment variables if available.
 #'
 #' @param dataset_id ID of the dataset (exact).
 #' @param variables Vector or list of variables to download.
@@ -11,8 +15,8 @@
 #' @param depth Vector of 2 values: minimum and maximum depth.
 #' @param dataset_version Dataset version.
 #' @param output_file Output file. By default, generates one based on dates.
-#' @param username Copernicus Marine username (optional, will be asked interactively if not provided).
-#' @param password Copernicus Marine password (optional, will be asked interactively if not provided).
+#' @param username Copernicus Marine username (optional, will try to get from stored credentials).
+#' @param password Copernicus Marine password (optional, will try to get from stored credentials).
 #' @param verbose_download Show detailed messages.
 #' @param ... Other extra arguments passed to the Python function.
 #' @return Absolute path to the downloaded file, or NULL if it fails.
@@ -27,16 +31,34 @@ copernicus_download <- function(dataset_id, variables, start_date, end_date,
                                 verbose_download = TRUE,
                                 ...) {
 
-  # Prompt for username and password if not provided
+  # Get credentials using the centralized system
+  credentials <- copernicus_get_credentials(mask_password = FALSE)
+
+  # Use provided parameters or fall back to stored credentials
   if (is.null(username)) {
+    username <- credentials$username
+  }
+  if (is.null(password)) {
+    password <- credentials$password
+  }
+
+  # If still no credentials, prompt interactively
+  if (is.null(username)) {
+    cat("ℹ️  No username found in stored credentials.\n")
     username <- readline(prompt = "🔑 Enter your Copernicus Marine username: ")
   }
   if (is.null(password)) {
+    cat("ℹ️  No password found in stored credentials.\n")
     if (requireNamespace("getPass", quietly = TRUE)) {
       password <- getPass::getPass("🔑 Enter your Copernicus Marine password: ")
     } else {
       password <- readline(prompt = "🔑 Enter your Copernicus Marine password: ")
     }
+  }
+
+  # Validate we have both credentials
+  if (is.null(username) || is.null(password) || username == "" || password == "") {
+    stop("❌ Username and password are required. Use copernicus_setup_credentials() to store them.")
   }
 
   # Check that the environment is configured
@@ -155,30 +177,49 @@ copernicus_download <- function(dataset_id, variables, start_date, end_date,
   })
 }
 
-
 #' @title Test Copernicus integration
 #'
 #' @description
 #' Performs a small test download to validate that the whole system works.
+#' Uses stored credentials if available.
 #'
-#' @param username Copernicus Marine username (optional). If NULL, will be asked interactively.
-#' @param password Copernicus Marine password (optional). If NULL, will be asked interactively.
+#' @param username Copernicus Marine username (optional). Will try to get from stored credentials first.
+#' @param password Copernicus Marine password (optional). Will try to get from stored credentials first.
 #' @return TRUE if the test was successful.
 #' @export
 copernicus_test <- function(username = NULL, password = NULL) {
   cat("🧪 Testing download from Copernicus Marine...\n")
 
-  # Prompt for username and password if not provided
+  # Get credentials using the centralized system
+  credentials <- copernicus_get_credentials(mask_password = FALSE)
+
+  # Use provided parameters or fall back to stored credentials
   if (is.null(username)) {
+    username <- credentials$username
+  }
+  if (is.null(password)) {
+    password <- credentials$password
+  }
+
+  # If still no credentials, prompt interactively
+  if (is.null(username)) {
+    cat("ℹ️  No username found in stored credentials.\n")
     username <- readline(prompt = "🔑 Enter your Copernicus Marine username: ")
   }
   if (is.null(password)) {
-    # Use getPass if available for hidden input
+    cat("ℹ️  No password found in stored credentials.\n")
     if (requireNamespace("getPass", quietly = TRUE)) {
       password <- getPass::getPass("🔑 Enter your Copernicus Marine password: ")
     } else {
       password <- readline(prompt = "🔑 Enter your Copernicus Marine password: ")
     }
+  }
+
+  # Validate we have both credentials
+  if (is.null(username) || is.null(password) || username == "" || password == "") {
+    cat("❌ Username and password are required.\n")
+    cat("💡 Use copernicus_setup_credentials() to store them.\n")
+    return(FALSE)
   }
 
   # Use date from 3 days ago for higher chance of success
@@ -209,16 +250,15 @@ copernicus_test <- function(username = NULL, password = NULL) {
     return(FALSE)
   }
 }
-#
 
 #' @title Check if Copernicus Marine Python module is ready
 #'
 #' @description
-#' Checks if the Python module is properly loaded to use Copernicus Marine.
-#' Returns TRUE if the module exists.
+#' Checks if the Python module is properly loaded and credentials are configured
+#' to use Copernicus Marine. Returns TRUE if everything is ready.
 #'
 #' @param verbose Show detailed status information.
-#' @return TRUE if the Python module is loaded and ready.
+#' @return TRUE if the Python module is loaded and credentials are available.
 #' @export
 copernicus_is_ready <- function(verbose = TRUE) {
 
@@ -227,9 +267,14 @@ copernicus_is_ready <- function(verbose = TRUE) {
   # Check Python module
   module_ok <- exists("cm", envir = copernicus_env) && !is.null(get("cm", envir = copernicus_env))
 
+  # Check credentials
+  credentials <- copernicus_get_credentials(mask_password = FALSE)
+  credentials_ok <- !is.null(credentials$username) && !is.null(credentials$password)
+
   if (verbose) {
     cat("🔍 Checking Copernicus Marine environment:\n\n")
 
+    # Python module status
     if (module_ok) {
       cat("✅ Python module copernicusmarine: OK\n")
     } else {
@@ -237,16 +282,29 @@ copernicus_is_ready <- function(verbose = TRUE) {
       cat("💡 Run setup_copernicus() to configure\n")
     }
 
+    # Credentials status
+    if (credentials_ok) {
+      cat("✅ Credentials configured for user:", credentials$username, "\n")
+    } else {
+      cat("❌ Credentials: NOT CONFIGURED\n")
+      cat("💡 Run copernicus_setup_credentials() to configure\n")
+    }
+
     cat("\n")
 
-    if (module_ok) {
+    if (module_ok && credentials_ok) {
       cat("🎉 Ready to use Copernicus Marine!\n")
       cat("🧪 Run copernicus_test() for a test download\n")
     } else {
-      cat("⚠️  Module not loaded\n")
-      cat("1️⃣  Run: setup_copernicus()\n")
+      cat("⚠️  Setup incomplete:\n")
+      if (!module_ok) {
+        cat("1️⃣  Run: setup_copernicus()\n")
+      }
+      if (!credentials_ok) {
+        cat("2️⃣  Run: copernicus_setup_credentials('username', 'password')\n")
+      }
     }
   }
 
-  return(module_ok)
+  return(module_ok && credentials_ok)
 }

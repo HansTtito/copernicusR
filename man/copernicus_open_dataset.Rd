@@ -33,9 +33,9 @@ copernicus_open_dataset(
 
 \item{dataset_version}{Dataset version. Optional.}
 
-\item{username}{Copernicus Marine username (optional, asked interactively if not provided).}
+\item{username}{Copernicus Marine username (optional, will try to get from stored credentials).}
 
-\item{password}{Copernicus Marine password (optional, asked interactively if not provided).}
+\item{password}{Copernicus Marine password (optional, will try to get from stored credentials).}
 
 \item{verbose_open}{Show detailed messages.}
 
@@ -48,4 +48,5 @@ Python xarray.Dataset object, or NULL if it fails.
 Opens a dataset directly from Copernicus Marine using open_dataset.
 Returns a Python xarray.Dataset object that can be processed in R.
 Useful for exploring data without downloading full files.
+Uses stored credentials from options/environment variables if available.
 }

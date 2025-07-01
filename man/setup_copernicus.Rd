@@ -2,20 +2,42 @@
 % Please edit documentation in R/setup_copernicus.R
 \name{setup_copernicus}
 \alias{setup_copernicus}
-\title{Set up Copernicus Marine integration (Python)}
+\title{Set up Copernicus Marine integration with credentials}
 \usage{
-setup_copernicus(install_copernicus = TRUE)
+setup_copernicus(
+  install_copernicus = TRUE,
+  username = NULL,
+  password = NULL,
+  store_credentials = TRUE
+)
 }
 \arguments{
 \item{install_copernicus}{Logical. Should the copernicusmarine package be installed in Python if not available? Default: TRUE.}
+
+\item{username}{Character. Copernicus Marine username. If NULL, will try to get from options or environment variables.}
+
+\item{password}{Character. Copernicus Marine password. If NULL, will try to get from options or environment variables.}
+
+\item{store_credentials}{Logical. Should credentials be stored in session options? Default: TRUE.}
 }
 \value{
 Invisible TRUE if the configuration was successful.
 }
 \description{
 Sets up the Python environment and loads the copernicusmarine module for use in R.
+Optionally configures Copernicus Marine credentials for the session.
 It is recommended to run this once per session before calling other functions in the package.
 }
 \examples{
+# Basic setup without credentials
 setup_copernicus()
+
+# Setup with credentials
+setup_copernicus(username = "your_username", password = "your_password")
+
+# Setup reading from environment variables
+setup_copernicus()  # Will look for COPERNICUS_USERNAME and COPERNICUS_PASSWORD
+
+# Setup and store credentials for session
+setup_copernicus(username = "user", password = "pass", store_credentials = TRUE)
 }
