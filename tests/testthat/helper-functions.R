@@ -10,7 +10,7 @@ complete_cleanup <- function() {
 
   # Limpiar ambiente interno del paquete
   tryCatch({
-    copernicus_env <- .copernicus_env()
+    copernicus_env <- copernicusR:::.copernicus_env()
     if (exists("cm", envir = copernicus_env)) {
       rm("cm", envir = copernicus_env)
     }
@@ -76,7 +76,7 @@ debug_persistent_credentials <- function() {
   # 6. Ambiente interno del paquete
   cat("6. Internal package environment:\n")
   tryCatch({
-    copernicus_env <- .copernicus_env()
+    copernicus_env <- copernicusR:::.copernicus_env()
     objects_in_env <- ls(envir = copernicus_env)
     cat("   Objects in copernicus env:", paste(objects_in_env, collapse = ", "), "\n")
 

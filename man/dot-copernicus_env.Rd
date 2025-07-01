@@ -7,12 +7,12 @@
 .copernicus_env()
 }
 \value{
-A private environment in the package namespace.
+An environment object for internal package state management.
 }
 \description{
-This function creates (if it doesn't already exist) and returns the internal environment
-where the package stores persistent objects (e.g., the Python module, configurations, etc.).
-It is used to avoid polluting the user's global environment and to maintain
-references between the package's internal functions.
+This function creates and manages the internal environment where the package
+stores persistent objects (e.g., Python module references, configurations, etc.).
+Uses the package namespace to avoid global environment pollution while
+providing robust handling for different execution contexts (normal use, testing, etc.).
 }
 \keyword{internal}
