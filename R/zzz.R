@@ -5,13 +5,14 @@
 #' It is used to avoid polluting the user's global environment and to maintain
 #' references between the package's internal functions.
 #'
-#' @return A private environment in the global R space.
+#' @return A private environment in the package namespace.
 #' @keywords internal
 .copernicus_env <- function() {
-  if (!exists(".copernicus_internal_env", envir = .GlobalEnv)) {
-    assign(".copernicus_internal_env", new.env(parent = emptyenv()), envir = .GlobalEnv)
+  pkg_env <- parent.env(environment())
+  if (!exists(".copernicus_internal_env", envir = pkg_env)) {
+    assign(".copernicus_internal_env", new.env(parent = emptyenv()), envir = pkg_env)
   }
-  get(".copernicus_internal_env", envir = .GlobalEnv)
+  get(".copernicus_internal_env", envir = pkg_env)
 }
 
 .onAttach <- function(libname, pkgname) {

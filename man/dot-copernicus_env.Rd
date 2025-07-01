@@ -7,7 +7,7 @@
 .copernicus_env()
 }
 \value{
-A private environment in the global R space.
+A private environment in the package namespace.
 }
 \description{
 This function creates (if it doesn't already exist) and returns the internal environment
