@@ -1,4 +1,3 @@
-
 test_that(".copernicus_env creates and returns environment", {
   # Clear any existing environment
   if (exists(".copernicus_internal_env", envir = .GlobalEnv)) {

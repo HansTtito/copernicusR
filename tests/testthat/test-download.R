@@ -1,5 +1,3 @@
-# tests/testthat/test-download.R
-
 test_that("copernicus_download requires credentials", {
   # Clear credentials and mock environment
   suppressMessages(copernicus_clear_credentials())

@@ -1,5 +1,3 @@
-# Funciones auxiliares que se cargan automáticamente para todos los tests
-
 # Función para limpiar completamente el estado de credenciales
 complete_cleanup <- function() {
   # Limpiar opciones de sesión

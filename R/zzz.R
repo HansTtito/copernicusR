@@ -13,3 +13,13 @@
   }
   get(".copernicus_internal_env", envir = .GlobalEnv)
 }
+
+.onAttach <- function(libname, pkgname) {
+  packageStartupMessage(
+    "copernicusR loaded. To get started:\n",
+    "1. Ensure Python 3.7+ is installed\n",
+    "2. Run setup_copernicus() to configure\n",
+    "3. Get free account at: https://data.marine.copernicus.eu/register\n",
+    "Use copernicus_is_ready() to check configuration."
+  )
+}

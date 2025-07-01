@@ -31,21 +31,39 @@ setup_copernicus <- function(install_copernicus = TRUE,
                              password = NULL,
                              store_credentials = TRUE) {
 
-  # Configure Python environment
-  copernicus_env <- .copernicus_env()
-  py <- copernicus_configure_python()
-  assign("py", py, envir = copernicus_env)
+  # Check if reticulate is available
+  if (!requireNamespace("reticulate", quietly = TRUE)) {
+    stop("Package 'reticulate' is required but not available. Please install it with: install.packages('reticulate')")
+  }
 
-  # Install and import module
-  if (install_copernicus) copernicus_install_package(py)
-  cm <- copernicus_import_module(py)
-  assign("cm", cm, envir = copernicus_env)
+  # Check Python availability before proceeding
+  tryCatch({
+    copernicus_env <- .copernicus_env()
+    py <- copernicus_configure_python()
+    assign("py", py, envir = copernicus_env)
+  }, error = function(e) {
+    stop("Python configuration failed. Please ensure Python 3.7+ is installed and accessible. Error: ", e$message)
+  })
+
+  # Install and import module only if user requested
+  if (install_copernicus) {
+    message("Installing copernicusmarine Python package...")
+    copernicus_install_package(py)
+  }
+
+  tryCatch({
+    cm <- copernicus_import_module(py)
+    assign("cm", cm, envir = copernicus_env)
+  }, error = function(e) {
+    stop("Failed to import copernicusmarine. Please install manually with: reticulate::py_install('copernicusmarine')")
+  })
 
   # Handle credentials
   copernicus_setup_credentials(username, password, store_credentials)
 
   invisible(TRUE)
 }
+
 
 #' @title Configure Copernicus Marine credentials
 #'

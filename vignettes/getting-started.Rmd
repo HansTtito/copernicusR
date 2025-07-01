@@ -1,0 +1,51 @@
+---
+title: "Getting Started with copernicusR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with copernicusR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+# Getting Started with copernicusR
+
+This vignette shows how to set up and use copernicusR to access Copernicus Marine data.
+
+## Prerequisites
+
+1. Python 3.7+ installed
+2. Free Copernicus Marine account
+
+## Basic Setup
+
+```{r setup}
+library(copernicusR)
+
+# Check if everything is ready
+copernicus_is_ready()
+
+# Setup with your credentials
+setup_copernicus(username = "your_username", password = "your_password")
+```
+
+## Download Example
+
+```{r download}
+# Download sea surface temperature
+file <- copernicus_download(
+  dataset_id = "cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
+  variables = "thetao",
+  start_date = "2024-01-01",
+  end_date = "2024-01-01",
+  bbox = c(-10, 0, 35, 45)  # Mediterranean subset
+)
+```
+

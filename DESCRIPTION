@@ -1,20 +1,28 @@
 Package: copernicusR
-Type: Package
-Title: Interfaz R para Descarga de Datos de Copernicus Marine con Python
+Title: R Interface to Copernicus Marine Service
 Version: 0.1.0
 Authors@R: 
-    person("Hans", "Ttito", email = "kvttitos@gmail.com", role = c("aut", "cre"))
-Description: Permite configurar, explorar y descargar datos del servicio Copernicus Marine directamente desde R, utilizando la API oficial de Python y reticulate. Pensado para integración multiplataforma, portabilidad y facilidad de uso.
-Depends: R (>= 3.5.0)
-Imports: 
-    reticulate
+    person("Hans", "Ttito", , "kvttitos@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-3732-9419"))
+Description: Provides an R interface to the Copernicus Marine Service for 
+    downloading and accessing marine data. Integrates with the official 
+    'copernicusmarine' Python library through 'reticulate'. Requires Python 
+    3.7+ and a free Copernicus Marine account.
 License: MIT + file LICENSE
+URL: https://github.com/HansTtito/copernicusR
+BugReports: https://github.com/HansTtito/copernicusR/issues
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Suggests: 
+Imports:
+    reticulate (>= 1.20)
+Suggests:
     getPass,
     testthat (>= 3.0.0),
-    withr
-Config/testthat/edition: 3
+    withr,
+    terra,
+    stars,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+SystemRequirements: Python (>= 3.7), copernicusmarine Python library
