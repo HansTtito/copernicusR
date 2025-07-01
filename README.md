@@ -312,7 +312,6 @@ reticulate::py_install("copernicusmarine", pip = TRUE)
 1. **Check function documentation**: `?copernicus_download`
 2. **Validate your setup**: `copernicus_is_ready()`
 3. **Test with small requests** before large downloads
-4. **Check Copernicus Marine status**: [status.marine.copernicus.eu](https://status.marine.copernicus.eu)
 
 ---
 
